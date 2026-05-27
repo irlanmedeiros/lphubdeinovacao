@@ -43,7 +43,10 @@
   --color-brand-green-foreground: var(--brand-green-foreground);
   --color-brand-yellow: var(--brand-yellow);
   --color-brand-yellow-foreground: var(--brand-yellow-foreground);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-magenta: var(--brand-magenta);
   --color-surface: var(--surface);
+
 
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -67,9 +70,14 @@
   --brand-red-foreground: oklch(1 0 0);
   --brand-green: oklch(0.605 0.151 148);       /* #2A9D4B */
   --brand-green-foreground: oklch(1 0 0);
-  --brand-yellow: oklch(0.776 0.151 71);       /* #F5A623 */
+  --brand-yellow: oklch(0.83 0.16 82);          /* #F5B324 */
   --brand-yellow-foreground: oklch(0.2 0 0);
-  --surface: oklch(0.972 0.005 250);           /* #F5F7FA */
+  --brand-orange: oklch(0.7 0.19 45);           /* #E97A2A */
+  --brand-magenta: oklch(0.58 0.21 350);        /* #C73B7A */
+  --surface: oklch(0.972 0.005 250);            /* #F5F7FA */
+  --gradient-rainbow: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-magenta) 20%, var(--brand-red) 40%, var(--brand-orange) 60%, var(--brand-yellow) 80%, var(--brand-green) 100%);
+  --gradient-hero: linear-gradient(135deg, #eef3fb 0%, #ffffff 45%, #fdf4ec 100%);
+  --shadow-card: 0 20px 50px -20px color-mix(in oklab, var(--brand-blue) 25%, transparent);
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.18 0.03 264);
