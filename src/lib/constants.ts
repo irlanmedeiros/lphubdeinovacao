@@ -47,6 +47,16 @@ export const ESTAGIOS = [
   "Solução já utilizada em ambiente real",
 ] as const;
 
+export const TIPOS_INSCRICAO = [
+  { value: "individual", label: "Pessoa Individual" },
+  { value: "equipe", label: "Equipe" },
+  { value: "empresa", label: "Empresa (PJ)" },
+] as const;
+
+export const ESTADOS_BR = [
+  "AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO",
+] as const;
+
 export const STATUS_LABELS: Record<string, { label: string; className: string }> = {
   novo: { label: "Novo", className: "bg-[var(--brand-blue)] text-white" },
   em_analise: { label: "Em análise", className: "bg-[var(--brand-yellow)] text-black" },
