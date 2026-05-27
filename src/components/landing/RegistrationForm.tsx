@@ -8,9 +8,8 @@ import { submitRegistration } from "@/lib/registrations.functions";
 import { EIXOS, ESTAGIOS } from "@/lib/constants";
 import { maskCPF, maskPhone, digitsOnly } from "@/lib/masks";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RainbowStripe } from "./RainbowStripe";
 
 const schema = z.object({
   nome_completo: z.string().trim().min(2, "Informe seu nome completo").max(150),
@@ -24,6 +23,11 @@ const schema = z.object({
 });
 
 type FormValues = z.infer<typeof schema>;
+
+const fieldBase =
+  "block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus:border-[var(--brand-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)]/20";
+
+const labelBase = "block text-xs font-semibold uppercase tracking-wide text-slate-700";
 
 export function RegistrationForm() {
   const submitFn = useServerFn(submitRegistration);
@@ -61,13 +65,14 @@ export function RegistrationForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-2xl bg-white p-8 text-center shadow-2xl">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-green)] text-white text-2xl">✓</div>
-        <h3 className="text-xl font-bold text-[var(--navy)]">Cadastro confirmado</h3>
+      <div className="overflow-hidden rounded-2xl bg-white p-8 text-center shadow-2xl ring-1 ring-slate-200">
+        <RainbowStripe className="-mx-8 -mt-8 mb-6 h-1.5" />
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--brand-green)] text-3xl text-white shadow-lg">✓</div>
+        <h3 className="text-xl font-extrabold text-[var(--navy)]">Cadastro confirmado!</h3>
         <p className="mt-2 text-sm text-slate-600">
           Você receberá todas as atualizações do edital por e-mail.
         </p>
-        <Button onClick={() => setSubmitted(false)} variant="outline" className="mt-4">
+        <Button onClick={() => setSubmitted(false)} variant="outline" className="mt-6">
           Cadastrar outra pessoa
         </Button>
       </div>
@@ -75,22 +80,29 @@ export function RegistrationForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-6 shadow-2xl md:p-8">
-      <h3 className="text-xl font-bold text-[var(--navy)]">Pré-cadastro de Interesse</h3>
-      <p className="mt-1 text-sm text-slate-600">Cadastre-se para receber todas as informações do edital</p>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-2xl ring-1 ring-slate-200 md:p-8"
+    >
+      <RainbowStripe className="absolute inset-x-0 top-0 h-1.5" />
+      <div className="mb-5">
+        <h3 className="text-xl font-extrabold text-[var(--navy)]">Pré-cadastro de Interesse</h3>
+        <p className="mt-1 text-sm text-slate-600">Cadastre-se e receba todas as informações do edital</p>
+      </div>
 
-      <div className="mt-5 space-y-4">
+      <div className="space-y-4">
         <div>
-          <Label htmlFor="nome">Nome completo *</Label>
-          <Input id="nome" {...register("nome_completo")} />
+          <label htmlFor="nome" className={labelBase}>Nome completo *</label>
+          <input id="nome" className={`${fieldBase} mt-1.5`} {...register("nome_completo")} />
           {errors.nome_completo && <p className="mt-1 text-xs text-[var(--brand-red)]">{errors.nome_completo.message}</p>}
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label htmlFor="cpf">CPF *</Label>
-            <Input
+            <label htmlFor="cpf" className={labelBase}>CPF *</label>
+            <input
               id="cpf"
+              className={`${fieldBase} mt-1.5`}
               value={cpf}
               onChange={(e) => setValue("cpf", maskCPF(e.target.value), { shouldValidate: true })}
               placeholder="000.000.000-00"
@@ -98,9 +110,10 @@ export function RegistrationForm() {
             {errors.cpf && <p className="mt-1 text-xs text-[var(--brand-red)]">{errors.cpf.message}</p>}
           </div>
           <div>
-            <Label htmlFor="whatsapp">WhatsApp *</Label>
-            <Input
+            <label htmlFor="whatsapp" className={labelBase}>WhatsApp *</label>
+            <input
               id="whatsapp"
+              className={`${fieldBase} mt-1.5`}
               value={whatsapp}
               onChange={(e) => setValue("whatsapp", maskPhone(e.target.value), { shouldValidate: true })}
               placeholder="(00) 00000-0000"
@@ -110,25 +123,32 @@ export function RegistrationForm() {
         </div>
 
         <div>
-          <Label htmlFor="email">E-mail *</Label>
-          <Input id="email" type="email" {...register("email")} />
+          <label htmlFor="email" className={labelBase}>E-mail *</label>
+          <input id="email" type="email" className={`${fieldBase} mt-1.5`} {...register("email")} />
           {errors.email && <p className="mt-1 text-xs text-[var(--brand-red)]">{errors.email.message}</p>}
         </div>
 
         <div>
-          <Label>Tipo de inscrição *</Label>
-          <div className="mt-2 flex gap-3">
+          <span className={labelBase}>Tipo de inscrição *</span>
+          <div className="mt-2 grid grid-cols-2 gap-3">
             {[
               { v: "individual", l: "Pessoa individual" },
               { v: "equipe", l: "Equipe" },
             ].map((o) => (
               <label
                 key={o.v}
-                className={`flex flex-1 cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm ${
-                  tipo === o.v ? "border-[var(--brand-blue)] bg-[var(--brand-blue)]/5" : "border-slate-200"
+                className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium text-slate-700 transition ${
+                  tipo === o.v
+                    ? "border-[var(--brand-blue)] bg-[var(--brand-blue)]/5 text-[var(--brand-blue)]"
+                    : "border-slate-300 bg-white hover:border-slate-400"
                 }`}
               >
-                <input type="radio" value={o.v} {...register("tipo_inscricao")} className="accent-[var(--brand-blue)]" />
+                <input
+                  type="radio"
+                  value={o.v}
+                  {...register("tipo_inscricao")}
+                  className="h-4 w-4 accent-[var(--brand-blue)]"
+                />
                 {o.l}
               </label>
             ))}
@@ -136,25 +156,28 @@ export function RegistrationForm() {
         </div>
 
         <div>
-          <Label htmlFor="eixo">Eixo temático de interesse *</Label>
-          <select id="eixo" {...register("eixo_tematico")} className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+          <label htmlFor="eixo" className={labelBase}>Eixo temático de interesse *</label>
+          <select id="eixo" {...register("eixo_tematico")} className={`${fieldBase} mt-1.5`}>
             <option value="">Selecione…</option>
-            {EIXOS.map((e) => <option key={e.id} value={e.label}>{e.label}</option>)}
+            {EIXOS.map((e) => <option key={e.id} value={e.label}>{e.short}</option>)}
           </select>
           {errors.eixo_tematico && <p className="mt-1 text-xs text-[var(--brand-red)]">{errors.eixo_tematico.message}</p>}
         </div>
 
         <div>
-          <Label htmlFor="estagio">Estágio da sua ideia *</Label>
-          <select id="estagio" {...register("estagio_ideia")} className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+          <label htmlFor="estagio" className={labelBase}>Estágio da sua ideia *</label>
+          <select id="estagio" {...register("estagio_ideia")} className={`${fieldBase} mt-1.5`}>
             <option value="">Selecione…</option>
             {ESTAGIOS.map((e) => <option key={e} value={e}>{e}</option>)}
           </select>
           {errors.estagio_ideia && <p className="mt-1 text-xs text-[var(--brand-red)]">{errors.estagio_ideia.message}</p>}
         </div>
 
-        <div className="flex items-start gap-2">
-          <Checkbox id="aceite" onCheckedChange={(c) => setValue("aceite", (c === true) as true, { shouldValidate: true })} />
+        <div className="flex items-start gap-2 pt-1">
+          <Checkbox
+            id="aceite"
+            onCheckedChange={(c) => setValue("aceite", (c === true) as true, { shouldValidate: true })}
+          />
           <label htmlFor="aceite" className="text-xs leading-relaxed text-slate-600">
             Li e concordo com os termos do edital e com a Política de Privacidade.
           </label>
@@ -164,7 +187,7 @@ export function RegistrationForm() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-[var(--brand-blue)] py-6 text-base font-semibold text-white hover:bg-[var(--brand-blue)]/90"
+          className="w-full bg-[var(--brand-red)] py-6 text-base font-semibold text-white shadow-md transition hover:opacity-90"
         >
           {isSubmitting ? "Enviando…" : "Quero participar →"}
         </Button>
