@@ -198,10 +198,10 @@ function AdminPage() {
                   <th className="p-3">E-mail</th>
                   <th className="p-3">WhatsApp</th>
                   <th className="p-3">Tipo</th>
+                  <th className="p-3">Cadastro completo</th>
                   <th className="p-3">Eixo</th>
-                  <th className="p-3">Estágio</th>
                   <th className="p-3">Status</th>
-                  <th className="p-3">Cadastro</th>
+                  <th className="p-3">Data</th>
                 </tr>
               </thead>
               <tbody>
@@ -209,14 +209,19 @@ function AdminPage() {
                 {!isLoading && filtered.length === 0 && <tr><td colSpan={8} className="p-6 text-center text-slate-500">Nenhum cadastro encontrado.</td></tr>}
                 {filtered.map((r) => {
                   const eixo = EIXOS.find((e) => e.label === r.eixo_tematico);
+                  const tipoLabel = r.tipo_inscricao === "individual" ? "Individual" : r.tipo_inscricao === "equipe" ? "Equipe" : "Empresa";
                   return (
                     <tr key={r.id} className="border-t hover:bg-slate-50">
                       <td className="cursor-pointer p-3 font-medium" onClick={() => setDetail(r)}>{r.nome_completo}</td>
                       <td className="p-3">{r.email}</td>
                       <td className="p-3"><a className="text-[var(--brand-green)] hover:underline" target="_blank" rel="noreferrer" href={`https://wa.me/55${r.whatsapp.replace(/\D/g, "")}`}>{r.whatsapp}</a></td>
-                      <td className="p-3"><span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs">{r.tipo_inscricao === "individual" ? "Individual" : "Equipe"}</span></td>
-                      <td className="p-3"><span className={`rounded-full px-2 py-0.5 text-xs text-white ${eixo?.bg ?? "bg-slate-400"}`}>{eixo?.short ?? r.eixo_tematico}</span></td>
-                      <td className="p-3 max-w-[200px] truncate text-xs text-slate-600">{r.estagio_ideia}</td>
+                      <td className="p-3"><span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs">{tipoLabel}</span></td>
+                      <td className="p-3">
+                        {r.cadastro_completo
+                          ? <span className="rounded-full bg-[var(--brand-green)] px-2 py-0.5 text-xs font-medium text-white">Completo</span>
+                          : <span className="rounded-full bg-[var(--brand-yellow)] px-2 py-0.5 text-xs font-medium text-black">Pendente</span>}
+                      </td>
+                      <td className="p-3"><span className={`rounded-full px-2 py-0.5 text-xs text-white ${eixo?.bg ?? "bg-slate-400"}`}>{eixo?.short ?? r.eixo_tematico ?? "—"}</span></td>
                       <td className="p-3">
                         <select
                           value={r.status}
