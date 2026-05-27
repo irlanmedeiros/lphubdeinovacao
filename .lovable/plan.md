@@ -1,51 +1,127 @@
-## Objetivo
 
-Trazer a identidade visual oficial do **Hub de Inovação** (PDF anexado) para a landing page atual, que hoje está num tom genérico "azul marinho escuro". A landing passa a parecer parte do mesmo ecossistema do portal de empresas (`inovatec-connect-hub.lovable.app`), e o formulário de pré‑cadastro fica legível.
+## 1. Pré-cadastro (Hero) — simplificar
 
-## O que muda visualmente
+Em `RegistrationForm.tsx`, manter apenas:
+- Nome completo
+- E-mail
+- WhatsApp
+- Tipo de inscrição: **Individual**, **Equipe**, **Empresa** (3 opções agora)
 
-**Linguagem da marca (extraída do PDF):**
-- Fundo claro (off‑white / cinza muito leve), não mais navy chapado.
-- Faixa "arco‑íris" (azul · vermelho · verde · amarelo · laranja · magenta) no topo e rodapé como assinatura da marca.
-- Tipografia bold e arredondada para títulos em azul `#1A4BA0`, com pequena barra vermelha de acento.
-- Logo "HUB DE INOVAÇÃO" reconstruído em SVG (hexágono multicolor + wordmark) e usado no header, hero e footer.
-- Cards de eixos temáticos coloridos em bloco cheio (azul, vermelho, verde, amarelo) com ícone num círculo branco, exatamente como o slide 5.
+Remover do formulário: CPF, Eixo temático, Estágio da ideia.
 
-**Seções reestilizadas:**
-1. **Header** — fundo branco, faixa arco‑íris fina no topo, logo SVG à esquerda, navegação + botão vermelho "Pré‑cadastro".
-2. **Hero** — fundo claro com gradiente sutil (azul ↔ branco) inspirado no portal de referência; título grande em navy "Transforme sua ideia em **solução pública**" com barra vermelha de acento; cartão do formulário branco com sombra forte à direita; chips de estatísticas (9 finalistas / 3 vencedores / 100% apoio) em pílulas coloridas.
-3. **"O que é o edital"** — quatro cards brancos com ícone em círculo colorido, mantendo conteúdo atual.
-4. **Eixos temáticos** — grid de 4 cards em bloco de cor cheia (cidades = azul, gestão = vermelho, serviços = verde, comunicação = amarelo), com ícone branco em círculo, título em caixa alta e descrição (réplica fiel do slide 5).
-5. **Processo / Jornada** — timeline horizontal com bolinhas numeradas em azul e barra arco‑íris ligando as 7 etapas (slide 6).
-6. **Origem + Resultados** — duas colunas: texto à esquerda, painel de resultados (R$ 500mi, ROI 8x, 207 serviços, etc.) em cards em fundo navy à direita — único bloco escuro da página, para criar contraste, como o slide 10.
-7. **Sobre a INOVATEC‑JP** — banner claro com 3 selos (Serviço Social Autônomo, Validado pelo TCE‑PB, UFPB + Iniciativa Privada).
-8. **FAQ** — accordion com tipografia maior e borda esquerda colorida ao expandir.
-9. **Footer** — fundo navy, faixa arco‑íris embaixo, logo, navegação, contatos.
+Texto do checkbox passa a ser: *"Li e concordo com a Política de Privacidade."* (sem menção ao edital).
 
-## Correção do formulário (bug do "texto branco no fundo branco")
+Após envio bem-sucedido, em vez de só mostrar "Cadastro confirmado", o estado de sucesso oferece um CTA destacado **"Preencher cadastro completo →"** que abre `/cadastro?id=<registrationId>&tipo=<tipo>` em nova aba (`target="_blank"`). Também mantém o link em `toast`.
 
-- Forçar `text-foreground` (cor escura) explicitamente nos `Input`, `select` e nas labels dos radios do `RegistrationForm`, já que o `Input` base usa `bg-transparent` e estava herdando a cor do contexto navy.
-- Trocar `placeholder:text-muted-foreground` por uma cor com contraste garantido em fundo branco.
-- Estilizar o card do formulário com borda azul fina + faixa arco‑íris no topo do cartão, alinhado ao restante da identidade.
-- Botão de submit passa a usar o vermelho da marca (CTA principal), e o estado "enviado" usa o verde da marca com check em hexágono.
+Para isso, `submitRegistration` (server fn) passa a retornar `{ ok: true, id, tipo }`.
 
-## Tokens / CSS
+## 2. Hero — botão "Baixar edital" em destaque
 
-Em `src/styles.css`:
-- Manter os tokens já existentes (`--navy`, `--brand-blue`, `--brand-red`, `--brand-green`, `--brand-yellow`).
-- Adicionar `--brand-orange` e `--brand-magenta` (cores da faixa arco‑íris do PDF).
-- Adicionar utilitário `--gradient-rainbow` para a faixa do topo/rodapé.
-- Trocar `--background` do hero para um tom muito claro com leve gradiente em vez do navy chapado.
+No `Hero` (em `Sections.tsx`), abaixo do bloco de informações e acima/junto ao formulário, adicionar bloco em destaque com:
+- Botão grande `Baixar Edital (PDF)` → `/edital-2026.pdf` (download), com ícone de download, cor `--brand-red`, sombra.
+- Subtítulo curto: "Leia o edital completo antes de se inscrever."
 
-## Arquivos a alterar
+## 3. Nova rota `/cadastro` — cadastro completo
 
-- `src/styles.css` — novos tokens de cor + gradiente arco‑íris.
-- `src/components/landing/Sections.tsx` — reestruturar Header, Hero, EditalInfo, Timeline, Origin, About, FAQ, Footer com a nova identidade.
-- `src/components/landing/RegistrationForm.tsx` — correção de contraste + estilo do cartão.
-- `src/components/landing/HubLogo.tsx` *(novo)* — logo SVG do Hub (hexágono multicolor + wordmark) reutilizável.
-- `src/components/landing/RainbowStripe.tsx` *(novo)* — faixa decorativa arco‑íris reusada no topo/rodapé.
+Arquivo: `src/routes/cadastro.tsx` (público, abre em nova aba).
 
-## Fora do escopo
+Lê query params `id` e `tipo` (individual | equipe | empresa). Se não houver `id`, ainda permite preencher, mas exige que e-mail bata com um pré-cadastro existente.
 
-- Não toco em backend, schema, server functions, rota `/admin`, nem na lógica de submissão.
-- Não adiciono novas seções/conteúdo — só reestilização do que já existe + correção do form.
+Estrutura do formulário (baseado nos PDFs anexos):
+
+**Bloco 1 — Sobre a proposta** (sempre)
+- Título da proposta
+- Eixo temático (select com EIXOS)
+- Estágio da ideia (select com ESTAGIOS)
+
+**Bloco 2 — Dados do proponente**
+
+Se `tipo = empresa` (PJ):
+- Razão Social, CNPJ, Nome Fantasia
+- Nome do representante legal, CPF do representante
+- Upload: **Comprovação de poderes de representação** (PDF/JPG/PNG, máx 5 MB)
+- Endereço completo, Município, Estado, CEP
+- Telefone, WhatsApp, E-mail principal
+
+Se `tipo = individual` (PF):
+- Nome completo, CPF, Nome social (opcional)
+- CPF do representante legal (se menor — opcional)
+- Upload comprovação (opcional)
+- Endereço completo, Município, Estado, CEP, Telefone, WhatsApp, E-mail
+
+**Bloco 3 — Equipe** (somente se `tipo = equipe`, ou opcionalmente para empresa/individual)
+- Lista dinâmica de membros (add/remove). Cada membro: Nome, CPF, E-mail, Telefone, Função na equipe, Área de atuação, Formação.
+- Mínimo 1 membro quando tipo = equipe.
+
+**Bloco 4 — Declarações**
+- Aceite do edital + política de privacidade (aqui o aceite **inclui** o edital, conforme texto do PDF).
+
+Submit → server fn `submitFullRegistration` que faz UPDATE em `registrations` (campos novos) + INSERT em `registration_team_members` quando aplicável, e salva o caminho do arquivo de comprovação.
+
+## 4. Banco de dados — migration
+
+**Adicionar valor ao enum `tipo_inscricao`:**
+- `ALTER TYPE tipo_inscricao ADD VALUE 'empresa';`
+
+**Tornar opcionais no `registrations`** (já que pré-cadastro agora não envia tudo):
+- `cpf`, `eixo_tematico`, `estagio_ideia` → `DROP NOT NULL` (preenchidos depois no /cadastro)
+
+**Adicionar colunas no `registrations`** (cadastro completo):
+- `titulo_proposta text`
+- `razao_social text`, `cnpj text`, `nome_fantasia text`
+- `nome_social text`
+- `representante_nome text`, `representante_cpf text`
+- `comprovacao_path text` (caminho no Storage)
+- `endereco text`, `municipio text`, `estado text`, `cep text`, `telefone text`
+- `cadastro_completo boolean default false`
+
+**Nova tabela `registration_team_members`**:
+- `id uuid pk`, `registration_id uuid` (FK lógica), `nome`, `cpf`, `email`, `telefone`, `funcao`, `area_atuacao`, `formacao`, `created_at`
+- GRANTs para `authenticated` (read via admin) e `service_role` (all). Sem INSERT direto do cliente — tudo via server fn com `supabaseAdmin`.
+- RLS: somente admins leem (`has_role(auth.uid(), 'admin')`).
+
+**Storage bucket `comprovacoes`** (privado):
+- `INSERT INTO storage.buckets (id, name, public) VALUES ('comprovacoes','comprovacoes', false);`
+- Policies em `storage.objects`: somente `service_role` insere/lê; admins leem via signed URL gerada por server fn.
+
+## 5. Server functions
+
+Em `src/lib/registrations.functions.ts`:
+
+- `submitRegistration` (existente): aceitar novo schema reduzido (nome, email, whatsapp, tipo) + novo tipo `"empresa"`. Retornar `{ ok, id, tipo }`.
+- `submitFullRegistration` **novo**: recebe `id` (uuid do pré-cadastro), validação Zod condicional por tipo, body com todos os campos + array de membros. Faz UPDATE + INSERT membros via `supabaseAdmin`. Define `cadastro_completo = true`.
+- `uploadComprovacao` **novo**: recebe `id` + base64 do arquivo (pdf/jpg/png, ≤5 MB validado), faz upload no bucket `comprovacoes/<id>/<filename>` via `supabaseAdmin.storage`, retorna `path`.
+- `listRegistrations` (admin): incluir colunas novas e flag `cadastro_completo`. (Opcional: expor membros em outra fn `listTeamMembers`.)
+
+## 6. Admin (`/admin`) — pequeno ajuste
+
+- Tabela exibe nova coluna **Cadastro completo** (badge "Pendente"/"Completo").
+- Adicionar filtro por status já existe — não mudar nada além disso nesta iteração.
+
+## 7. Footer — Política de Privacidade
+
+Em `Sections.tsx`:
+- Nova seção curta `<Privacy />` antes do `Footer`, com título "Política de Privacidade" e ~6–8 linhas em português explicando: dados coletados (nome, e-mail, WhatsApp, CPF, dados da proposta), finalidade (gestão do edital, contato sobre etapas), base legal (LGPD — consentimento e legítimo interesse), compartilhamento (apenas com a comissão do INOVATEC-JP), direitos do titular (acesso, correção, exclusão via e-mail de contato), retenção (até o encerramento do edital + 5 anos para fins legais).
+- Adicionar link `Política de Privacidade` no `Footer` que rola até a seção (`#privacidade`).
+
+## Detalhes técnicos / arquivos
+
+**Criar**
+- `src/routes/cadastro.tsx` — página pública com o formulário completo (react-hook-form + zod, discriminated union por `tipo`).
+- `src/components/landing/Privacy.tsx` — ou seção dentro de `Sections.tsx`.
+
+**Editar**
+- `src/components/landing/RegistrationForm.tsx` — campos reduzidos, opção "empresa", novo CTA pós-envio.
+- `src/components/landing/Sections.tsx` — Hero ganha bloco de download em destaque; export de `Privacy`.
+- `src/routes/index.tsx` — incluir `<Privacy />` antes do `<Footer />`.
+- `src/lib/registrations.functions.ts` — schemas + 2 novas server fns.
+- `src/lib/constants.ts` — adicionar tipo "Empresa" à lista de tipos (se houver enum local) e manter EIXOS/ESTAGIOS.
+- `src/routes/admin.tsx` — coluna `cadastro_completo`.
+
+**Migration** (uma única chamada): enum value + DROP NOT NULL + novas colunas + nova tabela `registration_team_members` (com GRANTs + RLS + policies) + bucket `comprovacoes` + policies de storage.
+
+## Fora de escopo
+
+- E-mail transacional com link do cadastro completo (por ora só abre em nova aba via JS).
+- Edição do cadastro completo após envio.
+- Reenviar comprovação.
