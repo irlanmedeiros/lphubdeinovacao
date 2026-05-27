@@ -250,11 +250,12 @@ function AdminPage() {
               </SheetHeader>
               <div className="mt-6 space-y-4 text-sm">
                 <Field label="E-mail" value={detail.email} />
-                <Field label="CPF" value={detail.cpf} />
+                <Field label="CPF" value={detail.cpf ?? "—"} />
                 <Field label="WhatsApp" value={detail.whatsapp} />
-                <Field label="Tipo de inscrição" value={detail.tipo_inscricao === "individual" ? "Pessoa individual" : "Equipe"} />
-                <Field label="Eixo temático" value={detail.eixo_tematico} />
-                <Field label="Estágio da ideia" value={detail.estagio_ideia} />
+                <Field label="Tipo de inscrição" value={detail.tipo_inscricao === "individual" ? "Pessoa individual" : detail.tipo_inscricao === "equipe" ? "Equipe" : "Empresa"} />
+                <Field label="Cadastro completo" value={detail.cadastro_completo ? "Sim" : "Não"} />
+                <Field label="Eixo temático" value={detail.eixo_tematico ?? "—"} />
+                <Field label="Estágio da ideia" value={detail.estagio_ideia ?? "—"} />
                 <div>
                   <div className="text-xs font-semibold uppercase text-slate-500">Status</div>
                   <select
