@@ -154,7 +154,7 @@ export function RegistrationForm() {
         </div>
 
         <div className="flex items-start gap-2">
-          <Checkbox id="aceite" onCheckedChange={(c) => setValue("aceite", c === true as any, { shouldValidate: true })} />
+          <Checkbox id="aceite" onCheckedChange={(c) => setValue("aceite", (c === true) as true, { shouldValidate: true })} />
           <label htmlFor="aceite" className="text-xs leading-relaxed text-slate-600">
             Li e concordo com os termos do edital e com a Política de Privacidade.
           </label>
