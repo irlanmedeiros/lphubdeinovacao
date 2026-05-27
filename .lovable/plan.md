@@ -1,121 +1,51 @@
-# Hub de Inovação — INOVATEC-JP
+## Objetivo
 
-Build a single-page landing site for individuals/teams to pre-register interest in the Edital Inova Soluções Públicas, plus an authenticated admin panel to manage submissions.
+Trazer a identidade visual oficial do **Hub de Inovação** (PDF anexado) para a landing page atual, que hoje está num tom genérico "azul marinho escuro". A landing passa a parecer parte do mesmo ecossistema do portal de empresas (`inovatec-connect-hub.lovable.app`), e o formulário de pré‑cadastro fica legível.
 
-## Stack
-- TanStack Start + React + TypeScript + Tailwind v4 + shadcn/ui
-- Lovable Cloud (Supabase Auth + DB + Storage) — enabled on first build step
-- Design tokens defined in `src/styles.css` (oklch conversions of the brand palette: navy `#0D2557`, blue `#1A4BA0`, red `#CC2229`, green `#2A9D4B`, yellow `#F5A623`, light gray `#F5F7FA`). Inter font via Google Fonts.
+## O que muda visualmente
 
-## Routes
-- `/` — landing page (all 7 sections)
-- `/admin/login` — admin sign-in (email + password)
-- `/_authenticated/admin` — dashboard (protected via `_authenticated` layout)
+**Linguagem da marca (extraída do PDF):**
+- Fundo claro (off‑white / cinza muito leve), não mais navy chapado.
+- Faixa "arco‑íris" (azul · vermelho · verde · amarelo · laranja · magenta) no topo e rodapé como assinatura da marca.
+- Tipografia bold e arredondada para títulos em azul `#1A4BA0`, com pequena barra vermelha de acento.
+- Logo "HUB DE INOVAÇÃO" reconstruído em SVG (hexágono multicolor + wordmark) e usado no header, hero e footer.
+- Cards de eixos temáticos coloridos em bloco cheio (azul, vermelho, verde, amarelo) com ícone num círculo branco, exatamente como o slide 5.
 
-## Landing page sections
-Single route `src/routes/index.tsx` composing section components under `src/components/landing/`:
-1. **Hero + Form** — navy bg, copy on left, white registration card on right. Sticky header with nav anchors.
-2. **Edital info** — 4 info cards (2x2) + 4 colored axis cards + prominent red "Baixar Edital (PDF)" download button (links to PDF in Storage public bucket).
-3. **Timeline** — 7 numbered steps, horizontal on desktop / vertical on mobile.
-4. **Why the Hub was born** — 2 columns: text + dark stats block.
-5. **About INOVATEC-JP** — navy bg, 3 pillars, red CTA to inovatecjp.com.
-6. **FAQ** — shadcn Accordion with 6 Q&A.
-7. **Footer** — navy bg, 3 columns + bottom bar.
+**Seções reestilizadas:**
+1. **Header** — fundo branco, faixa arco‑íris fina no topo, logo SVG à esquerda, navegação + botão vermelho "Pré‑cadastro".
+2. **Hero** — fundo claro com gradiente sutil (azul ↔ branco) inspirado no portal de referência; título grande em navy "Transforme sua ideia em **solução pública**" com barra vermelha de acento; cartão do formulário branco com sombra forte à direita; chips de estatísticas (9 finalistas / 3 vencedores / 100% apoio) em pílulas coloridas.
+3. **"O que é o edital"** — quatro cards brancos com ícone em círculo colorido, mantendo conteúdo atual.
+4. **Eixos temáticos** — grid de 4 cards em bloco de cor cheia (cidades = azul, gestão = vermelho, serviços = verde, comunicação = amarelo), com ícone branco em círculo, título em caixa alta e descrição (réplica fiel do slide 5).
+5. **Processo / Jornada** — timeline horizontal com bolinhas numeradas em azul e barra arco‑íris ligando as 7 etapas (slide 6).
+6. **Origem + Resultados** — duas colunas: texto à esquerda, painel de resultados (R$ 500mi, ROI 8x, 207 serviços, etc.) em cards em fundo navy à direita — único bloco escuro da página, para criar contraste, como o slide 10.
+7. **Sobre a INOVATEC‑JP** — banner claro com 3 selos (Serviço Social Autônomo, Validado pelo TCE‑PB, UFPB + Iniciativa Privada).
+8. **FAQ** — accordion com tipografia maior e borda esquerda colorida ao expandir.
+9. **Footer** — fundo navy, faixa arco‑íris embaixo, logo, navegação, contatos.
 
-SEO meta in route `head()`. Smooth-scroll via anchor IDs.
+## Correção do formulário (bug do "texto branco no fundo branco")
 
-### Registration form
-- React Hook Form + Zod validation. CPF and WhatsApp masks via simple input formatters.
-- Fields per spec. Submits via `createServerFn` (`submitRegistration`) that inserts into `registrations` using `supabaseAdmin` (public form — no auth required). Returns success/error; toast via Sonner.
-- Duplicate email handled gracefully.
+- Forçar `text-foreground` (cor escura) explicitamente nos `Input`, `select` e nas labels dos radios do `RegistrationForm`, já que o `Input` base usa `bg-transparent` e estava herdando a cor do contexto navy.
+- Trocar `placeholder:text-muted-foreground` por uma cor com contraste garantido em fundo branco.
+- Estilizar o card do formulário com borda azul fina + faixa arco‑íris no topo do cartão, alinhado ao restante da identidade.
+- Botão de submit passa a usar o vermelho da marca (CTA principal), e o estado "enviado" usa o verde da marca com check em hexágono.
 
-## Backend
+## Tokens / CSS
 
-### Lovable Cloud — enable first.
+Em `src/styles.css`:
+- Manter os tokens já existentes (`--navy`, `--brand-blue`, `--brand-red`, `--brand-green`, `--brand-yellow`).
+- Adicionar `--brand-orange` e `--brand-magenta` (cores da faixa arco‑íris do PDF).
+- Adicionar utilitário `--gradient-rainbow` para a faixa do topo/rodapé.
+- Trocar `--background` do hero para um tom muito claro com leve gradiente em vez do navy chapado.
 
-### Migration
-```sql
-create type tipo_inscricao_enum as enum ('individual','equipe');
-create type registration_status as enum ('novo','em_analise','contatado','aprovado','recusado');
+## Arquivos a alterar
 
-create table public.registrations (
-  id uuid primary key default gen_random_uuid(),
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  nome_completo text not null,
-  cpf text not null,
-  email text not null unique,
-  whatsapp text not null,
-  tipo_inscricao tipo_inscricao_enum not null,
-  eixo_tematico text not null,
-  estagio_ideia text not null,
-  status registration_status not null default 'novo',
-  notas_admin text
-);
+- `src/styles.css` — novos tokens de cor + gradiente arco‑íris.
+- `src/components/landing/Sections.tsx` — reestruturar Header, Hero, EditalInfo, Timeline, Origin, About, FAQ, Footer com a nova identidade.
+- `src/components/landing/RegistrationForm.tsx` — correção de contraste + estilo do cartão.
+- `src/components/landing/HubLogo.tsx` *(novo)* — logo SVG do Hub (hexágono multicolor + wordmark) reutilizável.
+- `src/components/landing/RainbowStripe.tsx` *(novo)* — faixa decorativa arco‑íris reusada no topo/rodapé.
 
-grant select, insert, update, delete on public.registrations to authenticated;
-grant all on public.registrations to service_role;
-alter table public.registrations enable row level security;
+## Fora do escopo
 
--- Admin role
-create type app_role as enum ('admin','user');
-create table public.user_roles (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users(id) on delete cascade not null,
-  role app_role not null,
-  unique (user_id, role)
-);
-grant select on public.user_roles to authenticated;
-grant all on public.user_roles to service_role;
-alter table public.user_roles enable row level security;
-
-create or replace function public.has_role(_user_id uuid, _role app_role)
-returns boolean language sql stable security definer set search_path=public as $$
-  select exists(select 1 from public.user_roles where user_id=_user_id and role=_role)
-$$;
-
--- Policies: only admins can read/update registrations via authenticated role
-create policy "admins read registrations" on public.registrations for select to authenticated using (public.has_role(auth.uid(),'admin'));
-create policy "admins update registrations" on public.registrations for update to authenticated using (public.has_role(auth.uid(),'admin'));
-create policy "admins read roles" on public.user_roles for select to authenticated using (auth.uid() = user_id);
-
--- Trigger to update updated_at
-create or replace function public.touch_updated_at() returns trigger language plpgsql as $$
-begin new.updated_at = now(); return new; end $$;
-create trigger registrations_touch before update on public.registrations
-  for each row execute function public.touch_updated_at();
-```
-
-Public form INSERTs go through a server function using `supabaseAdmin` (no client INSERT policy needed).
-
-### Storage
-Bucket `edital-docs` (public). PDF uploaded by user → I'll copy `EDITAL Nº ____2026.pdf` to `public/edital-2026.pdf` and link directly (simpler than Storage; static assets work fine for a public download).
-
-### Admin user
-After enabling Cloud, I'll instruct the user to sign up via `/admin/login`, then I'll insert their `user_roles` row via SQL (need their email). Alternatively a default admin is created via SQL using a pre-set email.
-
-## Admin panel
-- `src/routes/_authenticated.tsx` — layout: checks `supabase.auth.getUser()` + `has_role` server fn; redirects to `/admin/login` otherwise.
-- `src/routes/admin.login.tsx` — sign-in form.
-- `src/routes/_authenticated/admin.tsx` — dashboard:
-  - Top: 5 summary cards (total, novos, em_analise, contatados, aprovados)
-  - Filters: search (name/email), status, eixo, tipo, date range
-  - Table with all columns; inline status select; WhatsApp link `https://wa.me/55<digits>`; row click opens detail Sheet
-  - Detail Sheet: all fields + status select + notas textarea + save
-  - "Exportar CSV" button (client-side CSV generation)
-  - Sidebar with navy bg, logout button
-
-All admin data via `createServerFn` + `requireSupabaseAuth`, scoped via `has_role` check inside handlers.
-
-## Files to create/modify
-- `src/styles.css` — add brand tokens + Inter font
-- `src/routes/index.tsx` — landing
-- `src/components/landing/*.tsx` — Hero, EditalInfo, Timeline, Origin, About, FAQ, Footer, RegistrationForm, Header
-- `src/routes/_authenticated.tsx`, `src/routes/_authenticated/admin.tsx`, `src/routes/admin.login.tsx`
-- `src/lib/registrations.functions.ts` — `submitRegistration`, `listRegistrations`, `updateRegistration`, `checkAdmin`
-- `src/lib/cpf-mask.ts`, `src/lib/phone-mask.ts`
-- Migration for tables + roles
-- `public/edital-2026.pdf` — copied from upload
-
-## Open question
-Admin login: should I (a) create a default admin with a known email/password you'll change later, or (b) wait for you to sign up at `/admin/login` then promote your account? Either works — (a) is faster.
+- Não toco em backend, schema, server functions, rota `/admin`, nem na lógica de submissão.
+- Não adiciono novas seções/conteúdo — só reestilização do que já existe + correção do form.
