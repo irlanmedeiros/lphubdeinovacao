@@ -14,46 +14,127 @@ export type Database = {
   }
   public: {
     Tables: {
-      registrations: {
+      registration_team_members: {
         Row: {
+          area_atuacao: string
           cpf: string
           created_at: string
-          eixo_tematico: string
           email: string
-          estagio_ideia: string
+          formacao: string
+          funcao: string
           id: string
+          nome: string
+          registration_id: string
+          telefone: string
+        }
+        Insert: {
+          area_atuacao: string
+          cpf: string
+          created_at?: string
+          email: string
+          formacao: string
+          funcao: string
+          id?: string
+          nome: string
+          registration_id: string
+          telefone: string
+        }
+        Update: {
+          area_atuacao?: string
+          cpf?: string
+          created_at?: string
+          email?: string
+          formacao?: string
+          funcao?: string
+          id?: string
+          nome?: string
+          registration_id?: string
+          telefone?: string
+        }
+        Relationships: []
+      }
+      registrations: {
+        Row: {
+          cadastro_completo: boolean
+          cep: string | null
+          cnpj: string | null
+          comprovacao_path: string | null
+          cpf: string | null
+          created_at: string
+          eixo_tematico: string | null
+          email: string
+          endereco: string | null
+          estado: string | null
+          estagio_ideia: string | null
+          id: string
+          municipio: string | null
           nome_completo: string
+          nome_fantasia: string | null
+          nome_social: string | null
           notas_admin: string | null
+          razao_social: string | null
+          representante_cpf: string | null
+          representante_nome: string | null
           status: Database["public"]["Enums"]["registration_status"]
+          telefone: string | null
           tipo_inscricao: Database["public"]["Enums"]["tipo_inscricao_enum"]
+          titulo_proposta: string | null
           updated_at: string
           whatsapp: string
         }
         Insert: {
-          cpf: string
+          cadastro_completo?: boolean
+          cep?: string | null
+          cnpj?: string | null
+          comprovacao_path?: string | null
+          cpf?: string | null
           created_at?: string
-          eixo_tematico: string
+          eixo_tematico?: string | null
           email: string
-          estagio_ideia: string
+          endereco?: string | null
+          estado?: string | null
+          estagio_ideia?: string | null
           id?: string
+          municipio?: string | null
           nome_completo: string
+          nome_fantasia?: string | null
+          nome_social?: string | null
           notas_admin?: string | null
+          razao_social?: string | null
+          representante_cpf?: string | null
+          representante_nome?: string | null
           status?: Database["public"]["Enums"]["registration_status"]
+          telefone?: string | null
           tipo_inscricao: Database["public"]["Enums"]["tipo_inscricao_enum"]
+          titulo_proposta?: string | null
           updated_at?: string
           whatsapp: string
         }
         Update: {
-          cpf?: string
+          cadastro_completo?: boolean
+          cep?: string | null
+          cnpj?: string | null
+          comprovacao_path?: string | null
+          cpf?: string | null
           created_at?: string
-          eixo_tematico?: string
+          eixo_tematico?: string | null
           email?: string
-          estagio_ideia?: string
+          endereco?: string | null
+          estado?: string | null
+          estagio_ideia?: string | null
           id?: string
+          municipio?: string | null
           nome_completo?: string
+          nome_fantasia?: string | null
+          nome_social?: string | null
           notas_admin?: string | null
+          razao_social?: string | null
+          representante_cpf?: string | null
+          representante_nome?: string | null
           status?: Database["public"]["Enums"]["registration_status"]
+          telefone?: string | null
           tipo_inscricao?: Database["public"]["Enums"]["tipo_inscricao_enum"]
+          titulo_proposta?: string | null
           updated_at?: string
           whatsapp?: string
         }
@@ -98,7 +179,7 @@ export type Database = {
         | "contatado"
         | "aprovado"
         | "recusado"
-      tipo_inscricao_enum: "individual" | "equipe"
+      tipo_inscricao_enum: "individual" | "equipe" | "empresa"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -234,7 +315,7 @@ export const Constants = {
         "aprovado",
         "recusado",
       ],
-      tipo_inscricao_enum: ["individual", "equipe"],
+      tipo_inscricao_enum: ["individual", "equipe", "empresa"],
     },
   },
 } as const

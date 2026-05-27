@@ -68,8 +68,24 @@ export function Hero() {
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-slate-600">
             <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Inscrição gratuita</span>
-            <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Aberto a pessoas e equipes</span>
+            <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Pessoas, equipes e empresas</span>
             <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Apoio jurídico, técnico e financeiro</span>
+          </div>
+          <div className="mt-8 rounded-2xl border-2 border-[var(--brand-red)]/20 bg-white p-5 shadow-md">
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[var(--brand-red)]">Documento oficial</div>
+                <div className="mt-1 text-base font-extrabold text-[var(--navy)]">Baixe o Edital Completo</div>
+                <p className="mt-1 text-xs text-slate-600">Leia o edital antes de se inscrever.</p>
+              </div>
+              <a
+                href="/edital-2026.pdf"
+                download
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-red)] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90"
+              >
+                <FileDown className="h-5 w-5" /> Baixar Edital (PDF)
+              </a>
+            </div>
           </div>
         </div>
         <div className="relative"><RegistrationForm /></div>
