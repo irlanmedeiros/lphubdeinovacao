@@ -19,10 +19,11 @@ export const Route = createFileRoute("/admin")({
 
 type Reg = {
   id: string; created_at: string; updated_at: string;
-  nome_completo: string; cpf: string; email: string; whatsapp: string;
-  tipo_inscricao: "individual" | "equipe";
-  eixo_tematico: string; estagio_ideia: string;
+  nome_completo: string; cpf: string | null; email: string; whatsapp: string;
+  tipo_inscricao: "individual" | "equipe" | "empresa";
+  eixo_tematico: string | null; estagio_ideia: string | null;
   status: string; notas_admin: string | null;
+  cadastro_completo: boolean;
 };
 
 function AdminPage() {
