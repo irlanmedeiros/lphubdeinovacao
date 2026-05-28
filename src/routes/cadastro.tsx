@@ -10,7 +10,7 @@ import { EIXOS, ESTAGIOS, ESTADOS_BR, TIPOS_INSCRICAO } from "@/lib/constants";
 import { maskCPF, maskPhone, digitsOnly } from "@/lib/masks";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { HubLogo } from "@/components/landing/HubLogo";
+import hubLogo from "@/assets/hub-logo.svg";
 import { RainbowStripe } from "@/components/landing/RainbowStripe";
 import { Plus, Trash2, Upload, CheckCircle2 } from "lucide-react";
 
@@ -221,7 +221,7 @@ function CadastroPage() {
       <RainbowStripe className="h-1.5" />
       <header className="bg-white shadow-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <HubLogo />
+          <img src={hubLogo} alt="Hub de Inovação INOVATEC-JP" className="h-12 w-auto" />
           <a href="/edital-2026.pdf" download className="text-xs font-semibold text-[var(--brand-blue)] hover:underline">
             Baixar Edital (PDF)
           </a>

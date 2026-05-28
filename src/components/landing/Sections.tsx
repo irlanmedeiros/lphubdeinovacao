@@ -1,16 +1,16 @@
-import { Users, ChartBar, Trophy, ListOrdered, Building2, BarChart3, HeartHandshake, Megaphone, FileDown, ArrowRight } from "lucide-react";
+import { Users, ChartBar, Trophy, ListOrdered, Building2, BarChart3, HeartHandshake, Megaphone, FileDown, ArrowRight, Check, FileText, ClipboardCheck, Search, Mic, Medal, Handshake, Landmark, Scale, GraduationCap } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { EIXOS } from "@/lib/constants";
 import { RegistrationForm } from "./RegistrationForm";
-import { HubLogo } from "./HubLogo";
 import { RainbowStripe } from "./RainbowStripe";
+import hubLogo from "@/assets/hub-logo.svg";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm">
       <RainbowStripe className="h-1.5" />
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-        <a href="#hero"><HubLogo /></a>
+        <a href="#hero" className="flex items-center"><img src={hubLogo} alt="Hub de Inovação INOVATEC-JP" className="h-12 w-auto" /></a>
         <nav className="hidden gap-7 text-sm font-medium text-slate-700 lg:flex">
           <a href="#edital" className="hover:text-[var(--brand-blue)]">O Edital</a>
           <a href="#eixos" className="hover:text-[var(--brand-blue)]">Eixos</a>
@@ -67,9 +67,11 @@ export function Hero() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-slate-600">
-            <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Inscrição gratuita</span>
-            <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Pessoas, equipes e empresas</span>
-            <span className="rounded-full bg-white px-3 py-1 shadow-sm">✓ Apoio jurídico, técnico e financeiro</span>
+            {["Inscrição gratuita", "Pessoas, equipes e empresas", "Apoio jurídico, técnico e financeiro"].map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 shadow-sm">
+                <Check className="h-3.5 w-3.5 text-[var(--brand-green)]" /> {t}
+              </span>
+            ))}
           </div>
           <div className="mt-8 rounded-2xl border-2 border-[var(--brand-red)]/20 bg-white p-5 shadow-md">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -202,13 +204,13 @@ export function Eixos() {
 
 export function Timeline() {
   const steps = [
-    { e: "📝", t: "Inscrição", d: "Formulário online gratuito" },
-    { e: "✅", t: "Habilitação", d: "Análise de aderência ao edital" },
-    { e: "🔍", t: "Avaliação", d: "Banca avalia (0–100 pts)" },
-    { e: "🏆", t: "Finalistas", d: "Até 9 propostas convocadas" },
-    { e: "🎤", t: "Pitch", d: "Apresentação presencial" },
-    { e: "🥇", t: "Vencedores", d: "3 propostas selecionadas" },
-    { e: "🤝", t: "Formalização", d: "Instrumento + apoio completo" },
+    { Icon: FileText, t: "Inscrição", d: "Formulário online gratuito", c: "var(--brand-blue)" },
+    { Icon: ClipboardCheck, t: "Habilitação", d: "Análise de aderência ao edital", c: "var(--brand-red)" },
+    { Icon: Search, t: "Avaliação", d: "Banca avalia (0–100 pts)", c: "var(--brand-yellow)" },
+    { Icon: Trophy, t: "Finalistas", d: "Até 9 propostas convocadas", c: "var(--brand-green)" },
+    { Icon: Mic, t: "Pitch", d: "Apresentação presencial", c: "var(--brand-orange)" },
+    { Icon: Medal, t: "Vencedores", d: "3 propostas selecionadas", c: "var(--brand-magenta)" },
+    { Icon: Handshake, t: "Formalização", d: "Instrumento + apoio completo", c: "var(--brand-blue)" },
   ];
   return (
     <section id="processo" className="bg-[var(--surface)] py-20">
@@ -231,8 +233,10 @@ export function Timeline() {
                   {i + 1}
                 </div>
                 <div className="mt-4 rounded-xl bg-white p-4 text-center shadow-sm">
-                  <div className="text-2xl">{s.e}</div>
-                  <div className="mt-1 text-sm font-bold text-[var(--navy)]">{s.t}</div>
+                  <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: `color-mix(in oklab, ${s.c} 15%, white)` }}>
+                    <s.Icon className="h-5 w-5" style={{ color: s.c }} />
+                  </div>
+                  <div className="mt-2 text-sm font-bold text-[var(--navy)]">{s.t}</div>
                   <p className="mt-1 text-xs text-slate-600">{s.d}</p>
                 </div>
               </li>
@@ -295,7 +299,7 @@ export function About() {
   return (
     <section className="relative bg-[var(--surface)] py-20">
       <div className="mx-auto max-w-5xl px-4 text-center">
-        <div className="mx-auto flex justify-center"><HubLogo /></div>
+        <div className="mx-auto flex justify-center"><img src={hubLogo} alt="Hub de Inovação INOVATEC-JP" className="h-20 w-auto" /></div>
         <h2 className="mt-6 text-3xl font-extrabold text-[var(--navy)] md:text-4xl">
           Um projeto da Agência de Inovação Tecnológica de João Pessoa
         </h2>
@@ -306,13 +310,13 @@ export function About() {
         </p>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {[
-            { e: "🏛️", t: "Serviço Social Autônomo", d: "Transparência pública com agilidade privada", c: "var(--brand-blue)" },
-            { e: "⚖️", t: "Validado pelo TCE-PB", d: "Legalidade reconhecida por unanimidade", c: "var(--brand-red)" },
-            { e: "🎓", t: "UFPB + Iniciativa Privada", d: "Ecossistema de inovação real", c: "var(--brand-green)" },
+            { Icon: Landmark, t: "Serviço Social Autônomo", d: "Transparência pública com agilidade privada", c: "var(--brand-blue)" },
+            { Icon: Scale, t: "Validado pelo TCE-PB", d: "Legalidade reconhecida por unanimidade", c: "var(--brand-red)" },
+            { Icon: GraduationCap, t: "UFPB + Iniciativa Privada", d: "Ecossistema de inovação real", c: "var(--brand-green)" },
           ].map((p) => (
             <div key={p.t} className="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl text-2xl text-white" style={{ backgroundColor: p.c }}>
-                {p.e}
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl text-white" style={{ backgroundColor: p.c }}>
+                <p.Icon className="h-6 w-6" />
               </div>
               <div className="mt-4 font-bold text-[var(--navy)]">{p.t}</div>
               <p className="mt-1 text-sm text-slate-600">{p.d}</p>
@@ -387,7 +391,7 @@ export function Footer() {
     <footer className="bg-[var(--navy)] text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-3">
         <div>
-          <HubLogo variant="light" />
+          <img src={hubLogo} alt="Hub de Inovação INOVATEC-JP" className="h-14 w-auto brightness-0 invert" />
           <p className="mt-4 text-sm text-white/70">
             Inovar não é apenas criar — é transformar realidades com inteligência, criatividade e responsabilidade.
           </p>
