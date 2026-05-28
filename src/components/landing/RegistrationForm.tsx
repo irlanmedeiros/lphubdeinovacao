@@ -129,30 +129,6 @@ export function RegistrationForm() {
           {errors.whatsapp && <p className="mt-1 text-xs text-[var(--brand-red)]">{errors.whatsapp.message}</p>}
         </div>
 
-        <div>
-          <span className={labelBase}>Tipo de inscrição *</span>
-          <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
-            {TIPOS_INSCRICAO.map((o) => (
-              <label
-                key={o.value}
-                className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition ${
-                  tipo === o.value
-                    ? "border-[var(--brand-blue)] bg-[var(--brand-blue)]/5 text-[var(--brand-blue)]"
-                    : "border-slate-300 bg-white text-slate-700 hover:border-slate-400"
-                }`}
-              >
-                <input
-                  type="radio"
-                  value={o.value}
-                  {...register("tipo_inscricao")}
-                  className="h-4 w-4 accent-[var(--brand-blue)]"
-                />
-                {o.label}
-              </label>
-            ))}
-          </div>
-        </div>
-
         <div className="flex items-start gap-2 pt-1">
           <Checkbox
             id="aceite"
