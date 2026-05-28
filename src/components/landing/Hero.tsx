@@ -6,14 +6,7 @@ export function Hero() {
   return (
     <section id="hero" className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
       {/* Decorative hexagons */}
-      <div className="pointer-events-none absolute -right-24 -top-20 hidden h-[480px] w-[480px] opacity-30 lg:block" aria-hidden="true">
-        <svg viewBox="0 0 200 200" className="h-full w-full">
-          <polygon points="100,10 180,55 180,145 100,190 20,145 20,55" fill="none" stroke="var(--brand-blue)" strokeWidth="1" />
-          <polygon points="100,30 162,65 162,135 100,170 38,135 38,65" fill="none" stroke="var(--brand-red)" strokeWidth="1" />
-          <polygon points="100,55 138,77 138,123 100,145 62,123 62,77" fill="none" stroke="var(--brand-yellow)" strokeWidth="1" />
-        </svg>
-      </div>
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-[1.1fr_1fr] lg:py-24">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-[1.1fr_1fr] lg:py-24 items-center">
         <div className="relative">
           <span className="inline-flex items-center gap-2 rounded-full border border-[var(--brand-blue)]/20 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--brand-blue)] shadow-sm">
             <span className="h-2 w-2 rounded-full bg-[var(--brand-red)]" />
@@ -61,7 +54,9 @@ export function Hero() {
             </div>
           </div>
         </div>
-        <div className="relative"><RegistrationForm /></div>
+        <div className="relative">
+          <RegistrationForm />
+        </div>
       </div>
     </section>
   );
