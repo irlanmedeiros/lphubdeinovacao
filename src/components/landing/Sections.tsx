@@ -6,5 +6,4 @@ export { Timeline } from "./Timeline";
 export { Origin } from "./Origin";
 export { About } from "./About";
 export { FAQ } from "./FAQ";
-export { Privacy } from "./Privacy";
 export { Footer } from "./Footer";

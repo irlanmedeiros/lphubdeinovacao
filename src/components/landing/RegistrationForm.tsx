@@ -10,6 +10,7 @@ import { maskPhone, digitsOnly } from "@/lib/masks";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RainbowStripe } from "./RainbowStripe";
+import PrivacyDialog from "./PrivacyDialog";
 import { ArrowRight } from "lucide-react";
 
 const schema = z.object({
@@ -136,7 +137,7 @@ export function RegistrationForm() {
           />
           <label htmlFor="aceite" className="text-xs leading-relaxed text-slate-600">
             Li e concordo com a{" "}
-            <a href="#privacidade" className="text-[var(--brand-blue)] underline">Política de Privacidade</a>.
+            <PrivacyDialog trigger={<button type="button" className="text-brand-blue underline">Política de Privacidade</button>} />.
           </label>
         </div>
         {errors.aceite && <p className="-mt-2 text-xs text-[var(--brand-red)]">{errors.aceite.message}</p>}

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { RainbowStripe } from "./RainbowStripe";
 import hubLogo from "@/assets/hub-logo.svg";
+import PrivacyDialog from "./PrivacyDialog";
 
 export function Footer() {
   return (
@@ -20,7 +21,9 @@ export function Footer() {
             <li><a href="#eixos" className="hover:text-white">Eixos Temáticos</a></li>
             <li><a href="/edital-2026.pdf" download className="hover:text-white">Baixar Edital (PDF)</a></li>
             <li><a href="#faq" className="hover:text-white">Dúvidas</a></li>
-            <li><a href="#privacidade" className="hover:text-white">Política de Privacidade</a></li>
+            <li>
+              <PrivacyDialog trigger={<a className="hover:text-white">Política de Privacidade</a>} />
+            </li>
             <li><a href="/admin/login" className="hover:text-white">Acesso administrativo</a></li>
           </ul>
         </div>

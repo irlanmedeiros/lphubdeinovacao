@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import hubLogo from "@/assets/hub-logo.svg";
 import { RainbowStripe } from "@/components/landing/RainbowStripe";
 import { Plus, Trash2, Upload, CheckCircle2 } from "lucide-react";
+import PrivacyDialog from "@/components/landing/PrivacyDialog";
 
 type SearchParams = { id?: string; tipo?: "individual" | "equipe" | "empresa" };
 
@@ -492,7 +493,7 @@ function CadastroPage() {
               />
               <span>
                 Declaro que li, compreendi e concordo com os termos do <strong>Edital INOVATEC-JP 001/2026</strong>{" "}
-                e com a <a href="/#privacidade" target="_blank" className="text-[var(--brand-blue)] underline">Política de Privacidade</a>.
+                e com a <PrivacyDialog trigger={<a className="text-[var(--brand-blue)] underline">Política de Privacidade</a>} />.
               </span>
             </label>
             {errors.aceite && <p className="mt-2 text-xs text-[var(--brand-red)]">{errors.aceite.message}</p>}
