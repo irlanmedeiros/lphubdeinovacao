@@ -1,12 +1,14 @@
+import { FileText, ClipboardCheck, Search, Trophy, Mic, Medal, Handshake } from "lucide-react";
+
 export function Timeline() {
   const steps = [
-    { e: "📝", t: "Inscrição", d: "Formulário online gratuito" },
-    { e: "✅", t: "Habilitação", d: "Análise de aderência ao edital" },
-    { e: "🔍", t: "Avaliação", d: "Banca avalia (0–100 pts)" },
-    { e: "🏆", t: "Finalistas", d: "Até 9 propostas convocadas" },
-    { e: "🎤", t: "Pitch", d: "Apresentação presencial" },
-    { e: "🥇", t: "Vencedores", d: "3 propostas selecionadas" },
-    { e: "🤝", t: "Formalização", d: "Instrumento + apoio completo" },
+    { Icon: FileText, t: "Inscrição", d: "Formulário online gratuito", c: "var(--brand-blue)" },
+    { Icon: ClipboardCheck, t: "Habilitação", d: "Análise de aderência ao edital", c: "var(--brand-red)" },
+    { Icon: Search, t: "Avaliação", d: "Banca avalia (0–100 pts)", c: "var(--brand-yellow)" },
+    { Icon: Trophy, t: "Finalistas", d: "Até 9 propostas convocadas", c: "var(--brand-green)" },
+    { Icon: Mic, t: "Pitch", d: "Apresentação presencial", c: "var(--brand-blue)" },
+    { Icon: Medal, t: "Vencedores", d: "3 propostas selecionadas", c: "var(--brand-red)" },
+    { Icon: Handshake, t: "Formalização", d: "Instrumento + apoio completo", c: "var(--brand-green)" },
   ];
   return (
     <section id="processo" className="bg-[var(--surface)] py-20">
@@ -29,7 +31,9 @@ export function Timeline() {
                   {i + 1}
                 </div>
                 <div className="mt-4 rounded-xl bg-white p-4 text-center shadow-sm">
-                  <div className="text-2xl">{s.e}</div>
+                  <div className="mx-auto flex h-10 w-10 items-center justify-center">
+                    <s.Icon className="h-6 w-6" style={{ color: s.c }} />
+                  </div>
                   <div className="mt-1 text-sm font-bold text-[var(--navy)]">{s.t}</div>
                   <p className="mt-1 text-xs text-slate-600">{s.d}</p>
                 </div>
