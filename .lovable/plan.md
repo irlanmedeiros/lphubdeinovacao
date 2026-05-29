@@ -1,19 +1,9 @@
-## Substituir logo customizada e remover emojis
+## Corrigir substituição de emojis que não pegou
 
-### 1. Logo real
-- Copiar `user-uploads://Asset_1.svg` para `src/assets/hub-logo.svg`
-- Deletar `src/components/landing/HubLogo.tsx`
-- Em `Sections.tsx` substituir os 3 usos de `<HubLogo />`:
-  - **Header** (`variant dark`): `<img src={hubLogo} alt="Hub de Inovação INOVATEC-JP" className="h-12 w-auto" />`
-  - **About** (centralizado, maior): `className="h-20 w-auto"`
-  - **Footer** (`variant light`): igual ao header, mas com `className="... brightness-0 invert"` para ficar branco sobre o navy
-- Remover o import `HubLogo` de `Sections.tsx`
+O `src/components/landing/Sections.tsx` hoje é apenas um arquivo de re-export. As edições anteriores foram aplicadas nele, mas os componentes reais vivem em arquivos próprios (`Timeline.tsx`, `About.tsx`, etc.) — por isso ao clonar o repo os emojis ainda aparecem.
 
-### 2. Remover emojis e usar ícones lucide
-
-**Hero — selos de benefícios** (linhas 70-72): substituir `✓` por `<Check className="h-3.5 w-3.5 text-[var(--brand-green)]" />` dentro de cada chip.
-
-**Timeline — 7 etapas** (linhas 204-211): trocar `e: "📝"` etc. por componentes lucide:
+### 1. `src/components/landing/Timeline.tsx`
+Trocar o array de steps para usar componentes lucide ao invés de strings de emoji:
 - Inscrição → `FileText`
 - Habilitação → `ClipboardCheck`
 - Avaliação → `Search`
@@ -22,20 +12,19 @@
 - Vencedores → `Medal`
 - Formalização → `Handshake`
 
-Renderizar o ícone (no lugar do `text-2xl {s.e}`) num círculo colorido pequeno acima do título, usando a cor da marca por etapa para variar (alternando blue/red/yellow/green).
+Adicionar uma cor por etapa (alternando brand-blue / brand-red / brand-yellow / brand-green) e renderizar `<Icon className="h-6 w-6" style={{ color }} />` no lugar do `<div className="text-2xl">{s.e}</div>`.
 
-**About — 3 cards de pilares** (linhas 308-311): trocar `e: "🏛️" / "⚖️" / "🎓"` por:
+### 2. `src/components/landing/About.tsx`
+Trocar `e: "🏛️" / "⚖️" / "🎓"` por:
 - Serviço Social Autônomo → `Landmark`
 - Validado pelo TCE-PB → `Scale`
 - UFPB + Iniciativa Privada → `GraduationCap`
 
-Renderizar `<Icon className="h-6 w-6" />` dentro do quadrado colorido (substituindo o emoji).
+Renderizar `<Icon className="h-6 w-6 text-white" />` dentro do quadrado colorido, substituindo o `{p.e}`.
 
-### 3. Imports
-Adicionar ao import do lucide-react em `Sections.tsx`:
-`Check, FileText, ClipboardCheck, Search, Mic, Medal, Handshake, Landmark, Scale, GraduationCap`
-(manter `Trophy` que já existe).
+### 3. `src/lib/constants.ts`
+Linha 25 tem `icon: "🤝"` num eixo temático. Verificar se é usado em algum lugar; se sim, trocar por ícone lucide equivalente (`Handshake`) ou simplesmente remover esse campo se não estiver sendo renderizado (os Eixos já usam ícones lucide próprios em `Eixos.tsx`).
 
 ### Fora de escopo
-- Não mexer em RegistrationForm, cadastro.tsx, admin, backend, cores ou copy.
-- Não alterar a `<RainbowStripe />`.
+- Não mexer em logo (já está usando o SVG real corretamente nos arquivos certos)
+- Não mexer em backend, formulário, admin, copy ou cores

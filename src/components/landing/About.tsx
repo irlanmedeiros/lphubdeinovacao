@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Landmark, Scale, GraduationCap } from "lucide-react";
 import { RainbowStripe } from "./RainbowStripe";
 import hubLogo from "@/assets/hub-logo.svg";
 
@@ -17,13 +17,13 @@ export function About() {
         </p>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {[
-            { e: "🏛️", t: "Serviço Social Autônomo", d: "Transparência pública com agilidade privada", c: "var(--brand-blue)" },
-            { e: "⚖️", t: "Validado pelo TCE-PB", d: "Legalidade reconhecida por unanimidade", c: "var(--brand-red)" },
-            { e: "🎓", t: "UFPB + Iniciativa Privada", d: "Ecossistema de inovação real", c: "var(--brand-green)" },
+            { Icon: Landmark, t: "Serviço Social Autônomo", d: "Transparência pública com agilidade privada", c: "var(--brand-blue)" },
+            { Icon: Scale, t: "Validado pelo TCE-PB", d: "Legalidade reconhecida por unanimidade", c: "var(--brand-red)" },
+            { Icon: GraduationCap, t: "UFPB + Iniciativa Privada", d: "Ecossistema de inovação real", c: "var(--brand-green)" },
           ].map((p) => (
             <div key={p.t} className="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl text-2xl text-white" style={{ backgroundColor: p.c }}>
-                {p.e}
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl text-white" style={{ backgroundColor: p.c }}>
+                <p.Icon className="h-6 w-6" />
               </div>
               <div className="mt-4 font-bold text-[var(--navy)]">{p.t}</div>
               <p className="mt-1 text-sm text-slate-600">{p.d}</p>
