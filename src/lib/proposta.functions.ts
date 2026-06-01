@@ -87,7 +87,7 @@ export const savePropostaPartial = createServerFn({ method: "POST" })
     }
     const { error } = await supabaseAdmin
       .from("registrations")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id);
     if (error) {
       console.error("savePropostaPartial error", error);
