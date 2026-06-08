@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { gerarComprovante } from "./comprovante.functions";
 
 const preSchema = z.object({
   nome_completo: z.string().trim().min(2).max(150),
@@ -103,6 +104,13 @@ export const submitFullRegistration = createServerFn({ method: "POST" })
         console.error("team members insert error", memErr);
         return { ok: false as const, error: "Falha ao salvar membros da equipe." };
       }
+    }
+
+    // Generate comprovante PDF + send confirmation email (best-effort)
+    try {
+      await gerarComprovante({ data: { id } });
+    } catch (e) {
+      console.error("gerarComprovante failed", e);
     }
 
     return { ok: true as const };

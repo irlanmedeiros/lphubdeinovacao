@@ -13,13 +13,17 @@ export function Header() {
           <a href="#processo" className="hover:text-[var(--brand-blue)]">Processo</a>
           <a href="#origem" className="hover:text-[var(--brand-blue)]">Origem</a>
           <a href="#faq" className="hover:text-[var(--brand-blue)]">Dúvidas</a>
+          <a href="/status" className="hover:text-[var(--brand-blue)]">Consultar status</a>
         </nav>
-        <a
-          href="#hero"
-          className="rounded-full bg-[var(--brand-red)] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:opacity-90"
-        >
-          Pré-cadastro
-        </a>
+        <div className="flex items-center gap-3">
+          <a href="/status" className="hidden text-sm font-medium text-slate-700 hover:text-[var(--brand-blue)] md:inline">Status</a>
+          <a
+            href="#hero"
+            className="rounded-full bg-[var(--brand-red)] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:opacity-90"
+          >
+            Pré-cadastro
+          </a>
+        </div>
       </div>
     </header>
   );
