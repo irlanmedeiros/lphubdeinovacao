@@ -64,7 +64,8 @@ export const gerarComprovante = createServerFn({ method: "POST" })
     });
 
     // SHA-256
-    const hashBuf = await crypto.subtle.digest("SHA-256", pdfBytes);
+    const pdfBuf = Buffer.from(pdfBytes);
+    const hashBuf = await crypto.subtle.digest("SHA-256", new Uint8Array(pdfBuf));
     const hashHex = Array.from(new Uint8Array(hashBuf))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");

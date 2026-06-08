@@ -337,7 +337,7 @@ export async function buildComprovantePdf(args: BuildArgs): Promise<Uint8Array> 
   // === Hash & footers (second pass) ===
   // First serialize to compute hash, then re-issue with the real hash in footers.
   const tempBytes = await doc.save();
-  const hashBuf = await crypto.subtle.digest("SHA-256", tempBytes);
+  const hashBuf = await crypto.subtle.digest("SHA-256", new Uint8Array(tempBytes));
   const hash = Array.from(new Uint8Array(hashBuf))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
