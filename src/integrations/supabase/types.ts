@@ -14,6 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
+      edital_eventos: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          data_evento: string
+          descricao: string | null
+          dias_antes_avisar: number
+          id: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          data_evento: string
+          descricao?: string | null
+          dias_antes_avisar?: number
+          id?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          data_evento?: string
+          descricao?: string | null
+          dias_antes_avisar?: number
+          id?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_log: {
+        Row: {
+          assunto: string | null
+          destinatario: string
+          error: string | null
+          id: string
+          payload: Json | null
+          registration_id: string | null
+          sent_at: string
+          status: string
+          template: string
+        }
+        Insert: {
+          assunto?: string | null
+          destinatario: string
+          error?: string | null
+          id?: string
+          payload?: Json | null
+          registration_id?: string | null
+          sent_at?: string
+          status?: string
+          template: string
+        }
+        Update: {
+          assunto?: string | null
+          destinatario?: string
+          error?: string | null
+          id?: string
+          payload?: Json | null
+          registration_id?: string | null
+          sent_at?: string
+          status?: string
+          template?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_log_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       registration_proposta_arquivos: {
         Row: {
           created_at: string
@@ -293,6 +370,10 @@ export type Database = {
           apoio_decisao: string | null
           areas_publicas: string | null
           arquitetura_tecnologica: string | null
+          assinatura_at: string | null
+          assinatura_ip: string | null
+          assinatura_path: string | null
+          assinatura_ua: string | null
           beneficio_populacao: string | null
           cadastro_completo: boolean
           capacidade_equipe: string | null
@@ -300,6 +381,9 @@ export type Database = {
           cep: string | null
           cnpj: string | null
           comprovacao_path: string | null
+          comprovante_generated_at: string | null
+          comprovante_hash: string | null
+          comprovante_path: string | null
           cpf: string | null
           created_at: string
           cuidados_ia: string | null
@@ -351,6 +435,7 @@ export type Database = {
           potencial_expansao: string | null
           prejuizos: string | null
           processos_servicos: string | null
+          protocolo: string | null
           publico_afetado: string | null
           publico_beneficiario_direto: string | null
           publico_beneficiario_indireto: string | null
@@ -365,6 +450,7 @@ export type Database = {
           retorno_populacao: string | null
           riscos: string | null
           status: Database["public"]["Enums"]["registration_status"]
+          status_message: string | null
           tecnologias: string | null
           telefone: string | null
           tem_contrapartida: boolean | null
@@ -390,6 +476,10 @@ export type Database = {
           apoio_decisao?: string | null
           areas_publicas?: string | null
           arquitetura_tecnologica?: string | null
+          assinatura_at?: string | null
+          assinatura_ip?: string | null
+          assinatura_path?: string | null
+          assinatura_ua?: string | null
           beneficio_populacao?: string | null
           cadastro_completo?: boolean
           capacidade_equipe?: string | null
@@ -397,6 +487,9 @@ export type Database = {
           cep?: string | null
           cnpj?: string | null
           comprovacao_path?: string | null
+          comprovante_generated_at?: string | null
+          comprovante_hash?: string | null
+          comprovante_path?: string | null
           cpf?: string | null
           created_at?: string
           cuidados_ia?: string | null
@@ -448,6 +541,7 @@ export type Database = {
           potencial_expansao?: string | null
           prejuizos?: string | null
           processos_servicos?: string | null
+          protocolo?: string | null
           publico_afetado?: string | null
           publico_beneficiario_direto?: string | null
           publico_beneficiario_indireto?: string | null
@@ -462,6 +556,7 @@ export type Database = {
           retorno_populacao?: string | null
           riscos?: string | null
           status?: Database["public"]["Enums"]["registration_status"]
+          status_message?: string | null
           tecnologias?: string | null
           telefone?: string | null
           tem_contrapartida?: boolean | null
@@ -487,6 +582,10 @@ export type Database = {
           apoio_decisao?: string | null
           areas_publicas?: string | null
           arquitetura_tecnologica?: string | null
+          assinatura_at?: string | null
+          assinatura_ip?: string | null
+          assinatura_path?: string | null
+          assinatura_ua?: string | null
           beneficio_populacao?: string | null
           cadastro_completo?: boolean
           capacidade_equipe?: string | null
@@ -494,6 +593,9 @@ export type Database = {
           cep?: string | null
           cnpj?: string | null
           comprovacao_path?: string | null
+          comprovante_generated_at?: string | null
+          comprovante_hash?: string | null
+          comprovante_path?: string | null
           cpf?: string | null
           created_at?: string
           cuidados_ia?: string | null
@@ -545,6 +647,7 @@ export type Database = {
           potencial_expansao?: string | null
           prejuizos?: string | null
           processos_servicos?: string | null
+          protocolo?: string | null
           publico_afetado?: string | null
           publico_beneficiario_direto?: string | null
           publico_beneficiario_indireto?: string | null
@@ -559,6 +662,7 @@ export type Database = {
           retorno_populacao?: string | null
           riscos?: string | null
           status?: Database["public"]["Enums"]["registration_status"]
+          status_message?: string | null
           tecnologias?: string | null
           telefone?: string | null
           tem_contrapartida?: boolean | null
@@ -611,6 +715,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      next_protocolo: { Args: never; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user"
