@@ -9,11 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StatusRouteImport } from './routes/status'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as ApiPublicHooksStatusChangedRouteImport } from './routes/api/public/hooks/status-changed'
+import { Route as ApiPublicHooksLembretesEditalRouteImport } from './routes/api/public/hooks/lembretes-edital'
 
+const StatusRoute = StatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CadastroRoute = CadastroRouteImport.update({
   id: '/cadastro',
   path: '/cadastro',
@@ -34,42 +42,95 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiPublicHooksStatusChangedRoute =
+  ApiPublicHooksStatusChangedRouteImport.update({
+    id: '/api/public/hooks/status-changed',
+    path: '/api/public/hooks/status-changed',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksLembretesEditalRoute =
+  ApiPublicHooksLembretesEditalRouteImport.update({
+    id: '/api/public/hooks/lembretes-edital',
+    path: '/api/public/hooks/lembretes-edital',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/cadastro': typeof CadastroRoute
+  '/status': typeof StatusRoute
   '/admin/login': typeof AdminLoginRoute
+  '/api/public/hooks/lembretes-edital': typeof ApiPublicHooksLembretesEditalRoute
+  '/api/public/hooks/status-changed': typeof ApiPublicHooksStatusChangedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/cadastro': typeof CadastroRoute
+  '/status': typeof StatusRoute
   '/admin/login': typeof AdminLoginRoute
+  '/api/public/hooks/lembretes-edital': typeof ApiPublicHooksLembretesEditalRoute
+  '/api/public/hooks/status-changed': typeof ApiPublicHooksStatusChangedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/cadastro': typeof CadastroRoute
+  '/status': typeof StatusRoute
   '/admin/login': typeof AdminLoginRoute
+  '/api/public/hooks/lembretes-edital': typeof ApiPublicHooksLembretesEditalRoute
+  '/api/public/hooks/status-changed': typeof ApiPublicHooksStatusChangedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/cadastro' | '/admin/login'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/cadastro'
+    | '/status'
+    | '/admin/login'
+    | '/api/public/hooks/lembretes-edital'
+    | '/api/public/hooks/status-changed'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/cadastro' | '/admin/login'
-  id: '__root__' | '/' | '/admin' | '/cadastro' | '/admin/login'
+  to:
+    | '/'
+    | '/admin'
+    | '/cadastro'
+    | '/status'
+    | '/admin/login'
+    | '/api/public/hooks/lembretes-edital'
+    | '/api/public/hooks/status-changed'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/cadastro'
+    | '/status'
+    | '/admin/login'
+    | '/api/public/hooks/lembretes-edital'
+    | '/api/public/hooks/status-changed'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   CadastroRoute: typeof CadastroRoute
+  StatusRoute: typeof StatusRoute
+  ApiPublicHooksLembretesEditalRoute: typeof ApiPublicHooksLembretesEditalRoute
+  ApiPublicHooksStatusChangedRoute: typeof ApiPublicHooksStatusChangedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/status': {
+      id: '/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cadastro': {
       id: '/cadastro'
       path: '/cadastro'
@@ -98,6 +159,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/public/hooks/status-changed': {
+      id: '/api/public/hooks/status-changed'
+      path: '/api/public/hooks/status-changed'
+      fullPath: '/api/public/hooks/status-changed'
+      preLoaderRoute: typeof ApiPublicHooksStatusChangedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/lembretes-edital': {
+      id: '/api/public/hooks/lembretes-edital'
+      path: '/api/public/hooks/lembretes-edital'
+      fullPath: '/api/public/hooks/lembretes-edital'
+      preLoaderRoute: typeof ApiPublicHooksLembretesEditalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -115,7 +190,20 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   CadastroRoute: CadastroRoute,
+  StatusRoute: StatusRoute,
+  ApiPublicHooksLembretesEditalRoute: ApiPublicHooksLembretesEditalRoute,
+  ApiPublicHooksStatusChangedRoute: ApiPublicHooksStatusChangedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
